@@ -4,7 +4,7 @@ Supports directed and undirected graphs.
 Vertices should be of a user defined type.
  
 
-##Example
+## Example
 ```java
 Graph<String> roadGraph = new UndirectedGraph<>();
 roadGraph.addVertex("Piter");
@@ -13,10 +13,10 @@ roadGraph.addEdge("Piter", "Moscow");
 
 List<String> path = roadGraph.getPath("Piter", "Moscow"); 
 ```
-#API
+## API
 See javadoc
 
-#TODO
+## TODO
 1. Add generated graph tests
 1. Add weighted edges support
 1. Add traverse function that will take user defined function and apply it on every vertex of the graph
