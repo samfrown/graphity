@@ -1,4 +1,5 @@
 # Simple Graph library
+![Java CI with Maven](https://github.com/samfrown/graphity/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 Supports directed and undirected graphs.
 Vertices should be of a user defined type.
