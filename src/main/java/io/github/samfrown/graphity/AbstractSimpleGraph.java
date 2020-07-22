@@ -42,37 +42,27 @@ public abstract class AbstractSimpleGraph<T> implements Graph<T> {
         getNeighbours(from);
         getNeighbours(to);
 
-        Map<T, Integer> visitedVertexes = new HashMap<>(countVertexes());
+        VisitedVertexes<T> visitedVertexes = new VisitedVertexes<>(countVertexes());
         Deque<T> stack = new ArrayDeque<>();
         stack.add(from);
         while (!stack.isEmpty()) {
             T vertex = stack.peekLast();
             if (vertex.equals(to)) {
                 return concat(
-                        stack.stream().filter(v -> getVisits(v, visitedVertexes) == 1),
+                        stack.stream().filter(v -> visitedVertexes.getVisits(v) == 1),
                         Stream.of(to)).collect(toList());
             }
-            int visits = getVisits(vertex, visitedVertexes);
-            visitedVertexes.put(vertex, visits + 1);
-            if (visits != 0) {
+
+            if (visitedVertexes.incVisits(vertex) != 0) {
                 stack.removeLast();
                 continue;
             }
             vertexNeighbours.get(vertex).stream()
-                    .filter(v -> getVisits(v, visitedVertexes) == 0)
+                    .filter(v -> visitedVertexes.getVisits(v) == 0)
                     .forEach(stack::add);
         }
 
         return emptyList();
-    }
-
-    private int getVisits(T vertex, Map<T, Integer> visited) {
-        Integer visits = visited.get(vertex);
-        if (visits == null) {
-            visited.put(vertex, 0);
-            return 0;
-        }
-        return visits;
     }
 
     Set<T> getNeighbours(T vertex) {
@@ -81,5 +71,28 @@ public abstract class AbstractSimpleGraph<T> implements Graph<T> {
             throw new IllegalArgumentException("Vertex '" + vertex + "' doesn't exists");
         }
         return neighbours;
+    }
+
+    static class VisitedVertexes<T> {
+        private final Map<T, Integer> vertexVisits;
+
+        VisitedVertexes(int vertexCount) {
+            vertexVisits = new HashMap<>(vertexCount);
+        }
+
+        int getVisits(T vertex) {
+            Integer visits = vertexVisits.get(vertex);
+            if (visits == null) {
+                vertexVisits.put(vertex, 0);
+                return 0;
+            }
+            return visits;
+        }
+
+        int incVisits(T vertex) {
+            int visits = getVisits(vertex);
+            vertexVisits.put(vertex, visits + 1);
+            return visits;
+        }
     }
 }

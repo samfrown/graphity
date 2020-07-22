@@ -60,7 +60,7 @@ public abstract class AbstractSimpleGraphTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void getPath_forEmptyGraph() {
-        List<String> path = stringsGraph.getPath("a", "b");
+        stringsGraph.getPath("a", "b");
         // throws
     }
 
